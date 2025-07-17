@@ -5,7 +5,17 @@ ME=$(basename "$0")
 if [ -z "$CONSUL_CONFIG_DIR" ]; then
   CONSUL_CONFIG_DIR=/consul/config
 fi
-CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-discover.hcl"
+CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-auto-discover.hcl"
+
+# Check if consul-init configuration already exists
+if [ -f "${CONSUL_AUTO_DISCOVER_CONFIG}" ]; then
+  # By default, we do not override existing configuration
+  # unless CONSUL_AUTO_DISCOVER_CONFIG_OVERRIDE is set to true.
+  if [[ -z "${CONSUL_AUTO_DISCOVER_CONFIG_OVERRIDE}" ]]; then
+    echo "$ME: Consul auto discover configuration already exists, skipping initialization."
+    exit 0
+  fi
+fi
 
 echo "$ME: Initializing Consul auto discover configuration..."
 

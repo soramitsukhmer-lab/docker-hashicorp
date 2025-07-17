@@ -8,7 +8,7 @@ fi
 if [ -z "$CONSUL_CONFIG_DIR" ]; then
   CONSUL_CONFIG_DIR=/consul/config
 fi
-CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-discover.hcl"
+CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-auto-discover.hcl"
 
 entrypoint_log() {
     if [ -z "${CONSUL_ENTRYPOINT_QUIET_LOGS:-}" ]; then
