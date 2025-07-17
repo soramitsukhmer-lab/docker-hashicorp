@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [[ -z "${CONSUL_INIT}" ]]; then
+if [[ "${CONSUL_INIT}" != "true" ]]; then
     exit 0
 fi
 
