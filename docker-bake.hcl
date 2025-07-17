@@ -45,3 +45,13 @@ target "consul-init" {
   ]
   tags = [ "ghcr.io/soramitsukhmer-lab/consul-init:latest" ]
 }
+
+target "consul-auto-discover" {
+  inherits = [ "oci" ]
+  context = "consul-auto-discover"
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+  ]
+  tags = [ "ghcr.io/soramitsukhmer-lab/consul-auto-discover:latest" ]
+}
