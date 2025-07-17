@@ -44,12 +44,12 @@ else
 fi
 
 echo "$ME: Writing Consul configuration file to ${CONSUL_INIT_CONFIG}"
-cat <<CONSUL > "${CONSUL_INIT_CONFIG}"
+cat <<HCL > "${CONSUL_INIT_CONFIG}"
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
 ${CONSUL_ADVERTISE_ADDRESS:+"advertise_addr = \"${CONSUL_ADVERTISE_ADDRESS}\""}
 ${CONSUL_ADVERTISE_WAN_ADDRESS:+"advertise_wan_addr = \"${CONSUL_ADVERTISE_WAN_ADDRESS}\""}
-CONSUL
+HCL
 
 # Print the configuration file
 echo "$ME: Consul configuration file:"
