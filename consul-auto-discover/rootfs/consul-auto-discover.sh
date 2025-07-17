@@ -7,20 +7,10 @@ if [ -z "$CONSUL_CONFIG_DIR" ]; then
 fi
 CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-auto-discover.hcl"
 
-# Check if Docker socket is available
-# This is necessary for the discover command to work properly.
-if [[ -z "${DOCKER_HOST}" ]]; then
-  if [ ! -S "/var/run/docker.sock" ]; then
-    echo "$ME: Docker socket not found at /var/run/docker.sock, please mount the Docker socket into the container."
-    exit 1
-  fi
-fi
-
-# Check if consul-init configuration already exists
-if [ -f "${CONSUL_AUTO_DISCOVER_CONFIG}" ]; then
-  # By default, we do not override existing configuration
-  # unless CONSUL_AUTO_DISCOVER_CONFIG_OVERRIDE is set to true.
-  if [[ -z "${CONSUL_AUTO_DISCOVER_CONFIG_OVERRIDE}" ]]; then
+# If CONSUL_AUTO_DISCOVER_CONFIG_ONCE is set to true, we will skip the initialization
+# if the configuration file already exists. This is useful for one-time setups.
+if [[ "${CONSUL_AUTO_DISCOVER_CONFIG_ONCE}" == "true" ]]; then
+  if [ -f "${CONSUL_AUTO_DISCOVER_CONFIG}" ]; then
     echo "$ME: Consul auto discover configuration already exists, skipping initialization."
     exit 0
   fi
@@ -28,11 +18,20 @@ fi
 
 echo "$ME: Initializing Consul auto discover configuration..."
 
+# Check if Docker socket is available
+# This is necessary for the discover command to work properly.
+if [[ -z "${DOCKER_HOST}" ]]; then
+  if [ ! -S "/var/run/docker.sock" ]; then
+    echo "$ME: [ERROR] Unable to locate Docker socket at /var/run/docker.sock, please mount the Docker socket into the container."
+    exit 1
+  fi
+fi
+
 CONSUL_AUTO_DISCOVER=${CONSUL_AUTO_DISCOVER:-"provider=dockerswarm ${DOCKER_HOST:+"host=${DOCKER_HOST}"} type=node ${DOCKER_NODE_ROLE:+"role=${DOCKER_NODE_ROLE}"}"}
 CONSUL_AUTO_DISCOVER_ADDRS=`discover -q addrs "${CONSUL_AUTO_DISCOVER}"`
 
 if [ -z "$CONSUL_AUTO_DISCOVER_ADDRS" ]; then
-  echo "$ME: No addresses found for Consul auto discover configuration, exiting"
+  echo "$ME: [ERROR] No addresses found for Consul auto discover configuration, exiting"
   exit 1
 fi
 

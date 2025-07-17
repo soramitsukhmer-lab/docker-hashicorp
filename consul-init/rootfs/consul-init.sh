@@ -7,12 +7,11 @@ if [ -z "$CONSUL_CONFIG_DIR" ]; then
 fi
 CONSUL_INIT_CONFIG="${CONSUL_CONFIG_DIR}/consul-init.hcl"
 
-# Check if consul-init configuration already exists
-if [ -f "${CONSUL_INIT_CONFIG}" ]; then
-  # By default, we do not override existing configuration
-  # unless CONSUL_INIT_CONFIG_OVERRIDE is set to true.
-  if [[ -z "${CONSUL_INIT_CONFIG_OVERRIDE}" ]]; then
-    echo "$ME: Consul init configuration already exists, skipping initialization."
+# If CONSUL_INIT_CONFIG_ONCE is set to true, we will skip the initialization
+# if the configuration file already exists. This is useful for one-time setups.
+if [[ "${CONSUL_INIT_CONFIG_ONCE}" == "true" ]]; then
+  if [ -f "${CONSUL_INIT_CONFIG}" ]; then
+    echo "$ME: Consul auto discover configuration already exists, skipping initialization."
     exit 0
   fi
 fi
@@ -26,7 +25,7 @@ if [ -z "$CONSUL_ADVERTISE_ADDRESS" ]; then
   if [ -n "$CONSUL_ADVERTISE_INTERFACE" ]; then
     CONSUL_ADVERTISE_ADDRESS=$(ip -o -4 addr list $CONSUL_ADVERTISE_INTERFACE | head -n1 | awk '{print $4}' | cut -d/ -f1)
     if [ -z "$CONSUL_ADVERTISE_ADDRESS" ]; then
-      echo "$ME: Could not find IP for interface '$CONSUL_ADVERTISE_INTERFACE', exiting"
+      echo "$ME: [ERROR] Could not find IP for interface '$CONSUL_ADVERTISE_INTERFACE', exiting"
       exit 1
     fi
 
@@ -43,7 +42,7 @@ if [ -z "$CONSUL_ADVERTISE_WAN_ADDRESS" ]; then
   if [ -n "$CONSUL_ADVERTISE_WAN_INTERFACE" ]; then
     CONSUL_ADVERTISE_WAN_ADDRESS=$(ip -o -4 addr list $CONSUL_ADVERTISE_WAN_INTERFACE | head -n1 | awk '{print $4}' | cut -d/ -f1)
     if [ -z "$CONSUL_ADVERTISE_WAN_ADDRESS" ]; then
-      echo "$ME: Could not find IP for interface '$CONSUL_ADVERTISE_WAN_INTERFACE', exiting"
+      echo "$ME: [ERROR] Could not find IP for interface '$CONSUL_ADVERTISE_WAN_INTERFACE', exiting"
       exit 1
     fi
 
