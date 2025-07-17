@@ -9,9 +9,11 @@ CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-auto-discover.hcl"
 
 # Check if Docker socket is available
 # This is necessary for the discover command to work properly.
-if [ ! -S "/var/run/docker.sock" ]; then
-  echo "$ME: Docker socket not found at /var/run/docker.sock, please mount the Docker socket into the container."
-  exit 1
+if [[ -z "${DOCKER_HOST}" ]]; then
+  if [ ! -S "/var/run/docker.sock" ]; then
+    echo "$ME: Docker socket not found at /var/run/docker.sock, please mount the Docker socket into the container."
+    exit 1
+  fi
 fi
 
 # Check if consul-init configuration already exists
