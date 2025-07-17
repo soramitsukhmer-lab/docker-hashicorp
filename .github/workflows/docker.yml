@@ -52,10 +52,6 @@ jobs:
         id: github-meta
         uses: dockerbakery/github-metadata-action@v3
 
-      - name: Docker Triage action
-        id: docker-triage
-        uses: soramitsukhmer/uses/docker/triage-action@main
-
       - name: Docker Buildx Bake
         uses: docker/bake-action@v6
         with:
@@ -63,4 +59,3 @@ jobs:
           files: |
             ./docker-bake.hcl
             cwd://${{ steps.github-meta.outputs.bake-file }}
-            cwd://${{ steps.docker-triage.outputs.bake-file }}
