@@ -8,5 +8,5 @@ COPY --from=go-sockaddr /sockaddr /usr/bin/sockaddr
 COPY --from=go-netaddrs /netaddrs /usr/bin/netaddrs
 COPY --from=go-discover /discover /usr/bin/discover
 
-ADD --chmod=0755 consul-init.sh /consul-init.sh
+ADD rootfs /
 CMD [ "/consul-init.sh" ]
