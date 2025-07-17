@@ -5,7 +5,7 @@ CONSUL_INIT_CONFIG="/consul/config/consul-init.hcl"
 
 echo "$ME: Initializing Consul configuration..."
 
-if [ -z "${CONSUL_ADVERTISE_INTERFACE:-}" ]; then
+if [ -z "${CONSUL_ADVERTISE_INTERFACE}" ]; then
   echo "$ME: CONSUL_ADVERTISE_INTERFACE is not set, using default 'eth0'."
   CONSUL_ADVERTISE_INTERFACE=eth0
 else
