@@ -9,4 +9,4 @@ COPY --from=go-netaddrs /netaddrs /usr/bin/netaddrs
 COPY --from=go-discover /discover /usr/bin/discover
 
 ADD rootfs /
-CMD [ "/consul-init" ]
+CMD [ "/consul-init.sh" ]
