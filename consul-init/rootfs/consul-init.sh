@@ -7,6 +7,16 @@ if [ -z "$CONSUL_CONFIG_DIR" ]; then
 fi
 CONSUL_INIT_CONFIG="${CONSUL_CONFIG_DIR}/consul-init.hcl"
 
+# Check if consul-init configuration already exists
+if [ -f "${CONSUL_INIT_CONFIG}" ]; then
+  # By default, we do not override existing configuration
+  # unless CONSUL_INIT_CONFIG_OVERRIDE is set to true.
+  if [[ -z "${CONSUL_INIT_CONFIG_OVERRIDE}" ]]; then
+    echo "$ME: Consul init configuration already exists, skipping initialization."
+    exit 0
+  fi
+fi
+
 echo "$ME: Initializing Consul configuration..."
 
 # You can set CONSUL_ADVERTISE_INTERFACE to the name of the interface you'd like to
