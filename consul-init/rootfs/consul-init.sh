@@ -29,7 +29,9 @@ CONSUL
 # Print the configuration file
 echo "$ME: Consul configuration file:"
 cat "${CONSUL_INIT_CONFIG}" | while read -r line; do
-  echo "$ME: - $line"
+  if [[ -n "${line}" ]]; then
+    echo "$ME: - $line"
+  fi
 done
 
 echo "$ME: Done!"
