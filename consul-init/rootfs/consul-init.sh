@@ -20,10 +20,10 @@ if [ -z "$CONSUL_ADVERTISE_ADDRESS" ]; then
       exit 1
     fi
 
-    echo "$ME: ==> Found address '$CONSUL_ADVERTISE_ADDRESS' for interface '$CONSUL_ADVERTISE_INTERFACE', setting advertise option..."
+    echo "$ME: ==> Found address '$CONSUL_ADVERTISE_ADDRESS' for interface '$CONSUL_ADVERTISE_INTERFACE', setting 'advertise_addr' option..."
   fi
 else
-  echo "$ME: ==> Using provided '$CONSUL_ADVERTISE_ADDRESS' for CONSUL_ADVERTISE_ADDRESS, setting advertise option..."
+  echo "$ME: ==> Using provided '$CONSUL_ADVERTISE_ADDRESS' for CONSUL_ADVERTISE_ADDRESS, setting 'advertise_addr' option..."
 fi
 
 # You can set CONSUL_ADVERTISE_WAN_INTERFACE to the name of the interface you'd like to
@@ -37,10 +37,10 @@ if [ -z "$CONSUL_ADVERTISE_WAN_ADDRESS" ]; then
       exit 1
     fi
 
-    echo "$ME: ==> Found address '$CONSUL_ADVERTISE_WAN_ADDRESS' for interface '$CONSUL_ADVERTISE_WAN_INTERFACE', setting advertise wan option..."
+    echo "$ME: ==> Found address '$CONSUL_ADVERTISE_WAN_ADDRESS' for interface '$CONSUL_ADVERTISE_WAN_INTERFACE', setting 'advertise_wan_addr' option..."
   fi
 else
-  echo "$ME: ==> Using provided '$CONSUL_ADVERTISE_WAN_ADDRESS' for CONSUL_ADVERTISE_WAN_ADDRESS, , setting advertise wan option..."
+  echo "$ME: ==> Using provided '$CONSUL_ADVERTISE_WAN_ADDRESS' for CONSUL_ADVERTISE_WAN_ADDRESS, , setting 'advertise_wan_addr' option..."
 fi
 
 echo "$ME: Writing Consul configuration file to ${CONSUL_INIT_CONFIG}"
