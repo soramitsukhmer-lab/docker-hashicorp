@@ -6,10 +6,20 @@ group "default" {
 }
 
 target "consul" {
+  name = "consul-${replace(version, ".", "-")}"
+  matrix = {
+    "version" = [
+      "latest",
+      "1.21",
+    ]
+  }
   context = "consul"
-  tags = [ "ghcr.io/soramitsukhmer-lab/consul:dev" ]
+  args = {
+    "CONSUL_VERSION" = version
+  }
+  tags = [ "ghcr.io/soramitsukhmer-lab/consul:${version}" ]
 }
 target "consul-init" {
   context = "consul-init"
-  tags = [ "ghcr.io/soramitsukhmer-lab/consul-init:dev" ]
+  tags = [ "ghcr.io/soramitsukhmer-lab/consul-init:latest" ]
 }
