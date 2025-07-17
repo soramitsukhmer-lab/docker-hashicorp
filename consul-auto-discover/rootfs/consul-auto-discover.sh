@@ -26,7 +26,7 @@ fi
 
 echo "$ME: Initializing Consul auto discover configuration..."
 
-CONSUL_AUTO_DISCOVER=${CONSUL_AUTO_DISCOVER:-"provider=dockerswarm type=node ${CONSUL_AUTO_DISCOVER_ROLE:+"role=${CONSUL_AUTO_DISCOVER_ROLE}"}"}
+CONSUL_AUTO_DISCOVER=${CONSUL_AUTO_DISCOVER:-"provider=dockerswarm ${DOCKER_HOST:+"host=${DOCKER_HOST}"} type=node ${DOCKER_NODE_ROLE:+"role=${DOCKER_NODE_ROLE}"}"}
 CONSUL_AUTO_DISCOVER_ADDRS=`discover -q addrs "${CONSUL_AUTO_DISCOVER}"`
 
 if [ -z "$CONSUL_AUTO_DISCOVER_ADDRS" ]; then
