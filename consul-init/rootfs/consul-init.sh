@@ -1,5 +1,5 @@
 #!/bin/sh
-set -eou pipefail
+set -eo pipefail
 ME=$(basename "$0")
 CONSUL_INIT_CONFIG="/consul/config/consul-init.hcl"
 
