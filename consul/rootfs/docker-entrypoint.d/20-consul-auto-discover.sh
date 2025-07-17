@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-if [[ "${CONSUL_INIT}" != "true" ]]; then
+if [[ "${CONSUL_AUTO_DISCOVER}" != "true" ]]; then
     exit 0
 fi
 
