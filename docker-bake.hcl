@@ -6,6 +6,7 @@ group "default" {
   targets = [
     "consul",
     "consul-init",
+    "consul-auto-discover",
   ]
 }
 
