@@ -34,6 +34,9 @@ if [ -z "$CONSUL_AUTO_DISCOVER_ADDRS" ]; then
   exit 1
 fi
 
+# Set the bootstrap expectation based on the number of discovered addresses
+CONSUL_BOOTSTRAP_EXPECT=$(echo "$CONSUL_AUTO_DISCOVER_ADDRS" | wc -w)
+
 # Perform the discovery and prepare the retry_join configuration
 CONSUL_RETRY_JOIN="retry_join = ["
 for addr in $CONSUL_AUTO_DISCOVER_ADDRS; do
@@ -44,6 +47,7 @@ CONSUL_RETRY_JOIN="${CONSUL_RETRY_JOIN%??}]"  # Remove trailing comma and space
 
 echo "$ME: Writing Consul configuration file to ${CONSUL_AUTO_DISCOVER_CONFIG}"
 cat <<HCL > "${CONSUL_AUTO_DISCOVER_CONFIG}"
+bootstrap_expect = ${CONSUL_BOOTSTRAP_EXPECT}
 ${CONSUL_RETRY_JOIN}
 rejoin_after_leave = true
 HCL
