@@ -5,14 +5,24 @@ if [[ "${CONSUL_INIT}" != "true" ]]; then
     exit 0
 fi
 
+if [ -z "$CONSUL_CONFIG_DIR" ]; then
+  CONSUL_CONFIG_DIR=/consul/config
+fi
+CONSUL_INIT_CONFIG="${CONSUL_CONFIG_DIR}/consul-init.hcl"
+
 entrypoint_log() {
     if [ -z "${CONSUL_ENTRYPOINT_QUIET_LOGS:-}" ]; then
         echo "$@"
     fi
 }
 
-entrypoint_log "$0: Waiting for consul-init..."
-while [ ! -f /consul/config/consul-init.hcl ]; do
-    sleep 1
-done
-entrypoint_log "$0: consul-init completed, found /consul/config/consul-init.hcl"
+entrypoint_log "$0: Checking consul-init configuration..."
+
+if [ ! -f "${CONSUL_INIT_CONFIG}" ]; then
+    entrypoint_log "$0: consul-init configuration file not found, waiting for consul-init..."
+    while [ ! -f "${CONSUL_INIT_CONFIG}" ]; do
+        sleep 1
+    done
+fi
+
+entrypoint_log "$0: consul-init completed, found ${CONSUL_INIT_CONFIG}"

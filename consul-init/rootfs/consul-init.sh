@@ -1,7 +1,11 @@
 #!/bin/sh
 set -eo pipefail
 ME=$(basename "$0")
-CONSUL_INIT_CONFIG="/consul/config/consul-init.hcl"
+
+if [ -z "$CONSUL_CONFIG_DIR" ]; then
+  CONSUL_CONFIG_DIR=/consul/config
+fi
+CONSUL_INIT_CONFIG="${CONSUL_CONFIG_DIR}/consul-init.hcl"
 
 echo "$ME: Initializing Consul configuration..."
 
