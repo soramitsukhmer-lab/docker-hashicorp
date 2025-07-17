@@ -1,3 +1,7 @@
+variable "GITHUB_REPOSITORY" {
+  default = "soramitsukhmer-lab/dockerswarm-hashicorp-images"
+}
+
 group "default" {
   targets = [
     "consul",
@@ -5,8 +9,16 @@ group "default" {
   ]
 }
 
+target "oci" {
+  labels = {
+    "org.opencontainers.image.source" = "https://github.com/${GITHUB_REPOSITORY}"
+    "org.opencontainers.image.url" = "https://github.com/${GITHUB_REPOSITORY}"
+  }
+}
+
 target "consul" {
   name = "consul-${replace(version, ".", "-")}"
+  inherits = [ "oci" ]
   matrix = {
     "version" = [
       "latest",
@@ -23,7 +35,9 @@ target "consul" {
   ]
   tags = [ "ghcr.io/soramitsukhmer-lab/consul:${version}" ]
 }
+
 target "consul-init" {
+  inherits = [ "oci" ]
   context = "consul-init"
   platforms = [
     "linux/amd64",
