@@ -33,17 +33,17 @@ if [[ -z "${DOCKER_HOST}" ]]; then
   fi
 fi
 
-CONSUL_AUTO_DISCOVER_OPTS=${CONSUL_AUTO_DISCOVER_OPTS:-"provider=dockerswarm ${DOCKER_HOST:+"host=${DOCKER_HOST}"} type=node ${DOCKER_NODE_ROLE:+"role=${DOCKER_NODE_ROLE}"}"}
-CONSUL_AUTO_DISCOVER_ADDRS=`discover -q addrs "${CONSUL_AUTO_DISCOVER_OPTS}"`
+DISCOVER_OPTS=${DISCOVER_OPTS:-"provider=dockerswarm ${DOCKER_HOST:+"host=${DOCKER_HOST}"} type=node ${DOCKER_NODE_ROLE:+"role=${DOCKER_NODE_ROLE}"}"}
+DISCOVER_ADDRS=`discover -q addrs "${DISCOVER_OPTS}"`
 
-if [ -z "$CONSUL_AUTO_DISCOVER_ADDRS" ]; then
+if [ -z "$DISCOVER_ADDRS" ]; then
   echo "$ME: [ERROR] No addresses found for Consul auto discover configuration, exiting"
   exit 1
 fi
 
 # Perform the discovery and prepare the retry_join configuration
 CONSUL_RETRY_JOIN="retry_join = ["
-for addr in $CONSUL_AUTO_DISCOVER_ADDRS; do
+for addr in $DISCOVER_ADDRS; do
   CONSUL_RETRY_JOIN="${CONSUL_RETRY_JOIN}\"${addr}\", "
   echo "$ME: ==> Found address '$addr' for Consul auto discover configuration, adding to 'retry_join' option..."
 done
