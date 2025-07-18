@@ -7,6 +7,12 @@ if [ -z "$CONSUL_CONFIG_DIR" ]; then
 fi
 CONSUL_AUTO_DISCOVER_CONFIG="${CONSUL_CONFIG_DIR}/consul-auto-discover.hcl"
 
+# Check if CONSUL_AUTO_DISCOVER is enabled
+if [[ "${CONSUL_AUTO_DISCOVER}" != "true" ]]; then
+    entrypoint_log "$0: consul-auto-discover is not enabled, skipping..."
+    exit 0
+fi
+
 # If CONSUL_AUTO_DISCOVER_CONFIG_ONCE is set to true, we will skip the initialization
 # if the configuration file already exists. This is useful for one-time setups.
 if [[ "${CONSUL_AUTO_DISCOVER_CONFIG_ONCE}" == "true" ]]; then
