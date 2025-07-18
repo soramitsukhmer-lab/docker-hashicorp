@@ -33,8 +33,8 @@ if [[ -z "${DOCKER_HOST}" ]]; then
   fi
 fi
 
-CONSUL_AUTO_DISCOVER=${CONSUL_AUTO_DISCOVER:-"provider=dockerswarm ${DOCKER_HOST:+"host=${DOCKER_HOST}"} type=node ${DOCKER_NODE_ROLE:+"role=${DOCKER_NODE_ROLE}"}"}
-CONSUL_AUTO_DISCOVER_ADDRS=`discover -q addrs "${CONSUL_AUTO_DISCOVER}"`
+CONSUL_AUTO_DISCOVER_OPTS=${CONSUL_AUTO_DISCOVER_OPTS:-"provider=dockerswarm ${DOCKER_HOST:+"host=${DOCKER_HOST}"} type=node ${DOCKER_NODE_ROLE:+"role=${DOCKER_NODE_ROLE}"}"}
+CONSUL_AUTO_DISCOVER_ADDRS=`discover -q addrs "${CONSUL_AUTO_DISCOVER_OPTS}"`
 
 if [ -z "$CONSUL_AUTO_DISCOVER_ADDRS" ]; then
   echo "$ME: [ERROR] No addresses found for Consul auto discover configuration, exiting"
