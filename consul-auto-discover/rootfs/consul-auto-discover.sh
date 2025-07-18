@@ -52,6 +52,7 @@ CONSUL_RETRY_JOIN="${CONSUL_RETRY_JOIN%??}]"  # Remove trailing comma and space
 echo "$ME: Writing Consul configuration file to ${CONSUL_AUTO_DISCOVER_CONFIG}"
 cat <<HCL > "${CONSUL_AUTO_DISCOVER_CONFIG}"
 ${CONSUL_RETRY_JOIN}
+rejoin_after_leave = true
 HCL
 
 # Print the configuration file
