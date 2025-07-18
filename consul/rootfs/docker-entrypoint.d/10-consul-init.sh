@@ -1,10 +1,6 @@
 #!/bin/sh
 set -e
 
-if [[ "${CONSUL_INIT}" != "true" ]]; then
-    exit 0
-fi
-
 if [ -z "$CONSUL_CONFIG_DIR" ]; then
   CONSUL_CONFIG_DIR=/consul/config
 fi
@@ -15,6 +11,11 @@ entrypoint_log() {
         echo "$@"
     fi
 }
+
+if [[ "${CONSUL_INIT}" != "true" ]]; then
+    entrypoint_log "$0: consul-init is not enabled, skipping..."
+    exit 0
+fi
 
 entrypoint_log "$0: Checking consul-init configuration..."
 
