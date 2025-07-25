@@ -24,7 +24,7 @@ target "dev" {
   matrix = {
     version = MATRIX_VERSIONS
   }
-  name = "consul_${replace(version, ".", "_")}"
+  name = "consul_${replace(version, ".", "_")}_dev"
   context = "v${version}"
   tags = [
       "harbor.sorakh.io/soramitsukhmer-lab/consul:${version}-dev"
