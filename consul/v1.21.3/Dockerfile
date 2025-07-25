@@ -38,7 +38,7 @@ RUN echo "replace github.com/hashicorp/go-discover => github.com/socheatsok78-la
 
 # Build the consul binary
 ARG TARGETARCH
-ARG DOCKER_META_VERSION=
+ARG GITHUB_REPOSITORY_OWNER=soramitsukhmer-lab
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
 <<EOF
@@ -50,7 +50,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     GIT_COMMIT=$(git rev-parse --short HEAD)
     GIT_COMMIT_YEAR=$(git show -s --format=%cd --date=format:%Y HEAD)
     GIT_DIRTY=$(test -n "`git status --porcelain`" && echo "+CHANGES" || true)
-    GIT_DIRTY="${GIT_DIRTY}+soramitsukhmer-lab"
+    GIT_DIRTY=${GIT_DIRTY}${GITHUB_REPOSITORY_OWNER:+"+${GITHUB_REPOSITORY_OWNER}"}
     DATE_FORMAT="%Y-%m-%dT%H:%M:%SZ"
     GIT_DATE=$(date -u +${DATE_FORMAT})
 
