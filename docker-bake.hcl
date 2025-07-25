@@ -10,6 +10,7 @@ group "default" {
     "consul",
     "consul-init",
     "consul-auto-discover",
+    "vault",
   ]
 }
 
