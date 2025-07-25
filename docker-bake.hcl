@@ -14,6 +14,13 @@ group "default" {
   ]
 }
 
+group "dev" {
+  targets = [
+    "consul-dev",
+    "vault-dev",
+  ]
+}
+
 # --------------------------------------------------
 # HashiCorp Consul
 #--------------------------------------------------
@@ -68,12 +75,6 @@ target "consul-auto-discover" {
     "linux/arm64",
   ]
   tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-auto-discover:latest" ]
-}
-
-group "dev" {
-  targets = [
-    "consul-dev",
-  ]
 }
 
 # --------------------------------------------------
