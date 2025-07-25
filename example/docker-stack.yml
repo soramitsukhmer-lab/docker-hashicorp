@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/swarmlibs/dockerstack-schema/main/schema/dockerstack-spec.json
+
+services:
+  ingress:
+    image: caddy:2.10-alpine
+    command: caddy reverse-proxy --from :8500 --to tasks.consul:8500
+    ports:
+      - "8500:8500"
+    networks:
+      consul:
+
+  consul:
+    image: ghcr.io/soramitsukhmer-lab/consul:1.21.3-dev
+    command: agent
+    hostname: consul-{{.Task.Slot}}
+    environment:
+      CONSUL_LOCAL_CONFIG: |
+        {
+          "bind_addr": "0.0.0.0",
+          "client_addr": "0.0.0.0",
+          "advertise_addr": "{{`{{ GetInterfaceIP \"eth0\" }}`}}",
+          "ui_config": {
+            "enabled": true
+          },
+          "server": true,
+          "bootstrap": ${CONSUL_BOOTSTRAP:-false},
+          "retry_join": [
+            "provider=netaddrs addrs=tasks.consul"
+          ],
+          "rejoin_after_leave": true,
+          "services": [
+            { "name": "dashboard", "port": 8500 },
+            { "name": "dns", "port": 8600 }
+          ]
+        }
+    networks:
+      consul:
+    volumes:
+      - data:/consul/data
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 90s
+        order: stop-first
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 180s
+      rollback_config:
+        parallelism: 1
+        delay: 90s
+        order: stop-first
+
+networks:
+  consul:
+
+volumes:
+  data:
+    name: "{{.Service.Name}}_{{.Task.Slot}}_data"
