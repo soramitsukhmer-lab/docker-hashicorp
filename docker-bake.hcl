@@ -51,6 +51,17 @@ target "consul" {
   ]
 }
 
+target "consul-dev" {
+  matrix = {
+    version = CONSUL_VERSIONS
+  }
+  name = "consul_${replace(version, ".", "_")}_dev"
+  context = "consul/v${version}"
+  tags = [
+      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}-dev"
+  ]
+}
+
 target "consul-init" {
   inherits = [
     "docker-metadata-action",
@@ -85,17 +96,6 @@ variable "VAULT_VERSIONS" {
   type = list(string)
   default = [
     "1.20.0",
-  ]
-}
-
-target "consul-dev" {
-  matrix = {
-    version = VAULT_VERSIONS
-  }
-  name = "consul_${replace(version, ".", "_")}_dev"
-  context = "consul/v${version}"
-  tags = [
-      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}-dev"
   ]
 }
 
