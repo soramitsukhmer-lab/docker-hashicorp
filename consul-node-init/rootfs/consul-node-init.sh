@@ -5,18 +5,18 @@ ME=$(basename "$0")
 if [ -z "$CONSUL_CONFIG_DIR" ]; then
   CONSUL_CONFIG_DIR=/consul/config
 fi
-CONSUL_INIT_CONFIG="${CONSUL_CONFIG_DIR}/consul-init.hcl"
+CONSUL_NODE_INIT_CONFIG="${CONSUL_CONFIG_DIR}/consul-node-init.hcl"
 
-# Check if CONSUL_INIT is enabled
-if [[ "${CONSUL_INIT}" != "true" ]]; then
-    entrypoint_log "$0: consul-init is not enabled, skipping..."
+# Check if CONSUL_NODE_INIT is enabled
+if [[ "${CONSUL_NODE_INIT:-true}" == "false" ]]; then
+    echo "The $0 is not enabled, skipping..."
     exit 0
 fi
 
-# If CONSUL_INIT_CONFIG_ONCE is set to true, we will skip the initialization
+# If CONSUL_NODE_INIT_CONFIG_ONCE is set to true, we will skip the initialization
 # if the configuration file already exists. This is useful for one-time setups.
-if [[ "${CONSUL_INIT_CONFIG_ONCE}" == "true" ]]; then
-  if [ -f "${CONSUL_INIT_CONFIG}" ]; then
+if [[ "${CONSUL_NODE_INIT_CONFIG_ONCE:-false}" == "true" ]]; then
+  if [ -f "${CONSUL_NODE_INIT_CONFIG}" ]; then
     echo "$ME: Consul auto discover configuration already exists, skipping initialization."
     exit 0
   fi
@@ -58,8 +58,8 @@ else
   echo "$ME: ==> Using provided '$CONSUL_ADVERTISE_WAN_ADDRESS' for CONSUL_ADVERTISE_WAN_ADDRESS, , setting 'advertise_wan_addr' option..."
 fi
 
-echo "$ME: Writing Consul configuration file to ${CONSUL_INIT_CONFIG}"
-cat <<HCL > "${CONSUL_INIT_CONFIG}"
+echo "$ME: Writing Consul configuration file to ${CONSUL_NODE_INIT_CONFIG}"
+cat <<HCL > "${CONSUL_NODE_INIT_CONFIG}"
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
 ${CONSUL_ADVERTISE_ADDRESS:+"advertise_addr = \"${CONSUL_ADVERTISE_ADDRESS}\""}
@@ -68,7 +68,7 @@ HCL
 
 # Print the configuration file
 echo "$ME: Consul configuration file:"
-cat "${CONSUL_INIT_CONFIG}" | while read -r line; do
+cat "${CONSUL_NODE_INIT_CONFIG}" | while read -r line; do
   if [[ -n "${line}" ]]; then
     echo "$ME: - $line"
   fi

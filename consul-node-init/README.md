@@ -27,12 +27,12 @@ services:
       # - data:/consul/data
       - config:/consul/config
     depends_on:
-      - consul-init
+      - consul-node-init
 
-  consul-init:
-    image: ghcr.io/soramitsukhmer-lab/consul-init:dev
+  consul-node-init:
+    image: ghcr.io/soramitsukhmer-lab/consul-node-init:dev
     networks:
-      consul-init:
+      consul-node-network:
     volumes:
       - config:/consul/config
     deploy:
@@ -44,7 +44,7 @@ volumes:
 
 networks:
   consul:
-  consul-init:
+  consul-node-network:
     name: host
     external: true
 ```

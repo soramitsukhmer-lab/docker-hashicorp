@@ -1,0 +1,66 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/swarmlibs/dockerstack-schema/main/schema/dockerstack-spec.json
+
+services:
+  consul:
+    image: ghcr.io/soramitsukhmer-lab/consul:1.21.3-dev
+    command: agent
+    hostname: consul-{{.Task.Slot}}
+    environment:
+      CONSUL_LOCAL_CONFIG: |
+        {
+          "bind_addr": "0.0.0.0",
+          "client_addr": "0.0.0.0",
+          "advertise_addr": "{{`{{ GetInterfaceIP \"${CONSUL_ADVERTISE_INTERFACE:-eth0}\" }}`}}",
+          "ui_config": {
+            "enabled": true
+          },
+          "server": true,
+          "bootstrap": ${CONSUL_BOOTSTRAP:-false},
+          "retry_join": [
+            "provider=netaddrs addrs=\"exec=dockerswarm-node-discover.sh\""
+          ],
+          "rejoin_after_leave": true,
+          "services": [
+            { "name": "dashboard", "port": 8500 },
+            { "name": "dns", "port": 8600 }
+          ]
+        }
+    networks:
+      host:
+    volumes:
+      - data:/consul/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: dockerswarm-node-discover.sh
+        target: /bin/dockerswarm-node-discover.sh
+        mode: 0755
+    deploy:
+      mode: global
+      placement:
+        constraints:
+          - node.role == manager
+      update_config:
+        parallelism: 1
+        delay: 90s
+        order: stop-first
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+        window: 180s
+      rollback_config:
+        parallelism: 1
+        delay: 90s
+        order: stop-first
+
+configs:
+  dockerswarm-node-discover.sh:
+    file: ./dockerswarm-node-discover.sh
+
+volumes:
+  data:
+    name: '{{ index .Service.Labels "com.docker.stack.namespace" }}_consul_{{.Task.Slot}}_data'
+
+networks:
+  host:
+    name: host
+    external: true
