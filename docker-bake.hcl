@@ -13,14 +13,6 @@ group "default" {
   ]
 }
 
-group "dev" {
-  targets = [
-    "consul-dev",
-    "vault-dev",
-    "consul-node-init-dev",
-  ]
-}
-
 # --------------------------------------------------
 # HashiCorp Consul
 #--------------------------------------------------
@@ -47,18 +39,7 @@ target "consul" {
     "linux/arm64",
   ]
   tags = [
-      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}"
-  ]
-}
-
-target "consul-dev" {
-  matrix = {
-    version = CONSUL_VERSIONS
-  }
-  name = "consul_${replace(version, ".", "_")}_dev"
-  context = "consul/v${version}"
-  tags = [
-      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}-dev"
+    "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}"
   ]
 }
 
@@ -73,11 +54,6 @@ target "consul-node-init" {
     "linux/arm64",
   ]
   tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-node-init:latest" ]
-}
-
-target "consul-node-init-dev" {
-  context = "consul-node-init"
-  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-node-init:dev" ]
 }
 
 # --------------------------------------------------
@@ -106,17 +82,6 @@ target "vault" {
     "linux/arm64",
   ]
   tags = [
-      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/vault:${version}"
-  ]
-}
-
-target "vault-dev" {
-  matrix = {
-    version = VAULT_VERSIONS
-  }
-  name = "vault_${replace(version, ".", "_")}_dev"
-  context = "vault/v${version}"
-  tags = [
-      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/vault:${version}-dev"
+    "ghcr.io/${GITHUB_REPOSITORY_OWNER}/vault:${version}"
   ]
 }

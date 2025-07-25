@@ -17,7 +17,7 @@ services:
           "server": true,
           "bootstrap": ${CONSUL_BOOTSTRAP:-false},
           "retry_join": [
-            "provider=netaddrs addrs=\"exec=dockerswarm-node-discover.sh\""
+            "provider=netaddrs addrs=\"exec=docker-node-discover\""
           ],
           "rejoin_after_leave": true,
           "services": [
@@ -30,10 +30,6 @@ services:
     volumes:
       - data:/consul/data
       - /var/run/docker.sock:/var/run/docker.sock
-    configs:
-      - source: dockerswarm-node-discover.sh
-        target: /bin/dockerswarm-node-discover.sh
-        mode: 0755
     deploy:
       mode: global
       placement:
@@ -51,10 +47,6 @@ services:
         parallelism: 1
         delay: 90s
         order: stop-first
-
-configs:
-  dockerswarm-node-discover.sh:
-    file: ./dockerswarm-node-discover.sh
 
 volumes:
   data:
