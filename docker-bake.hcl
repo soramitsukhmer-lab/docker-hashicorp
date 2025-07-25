@@ -5,6 +5,10 @@ variable "MATRIX_VERSIONS" {
   ]
 }
 
+variable "GITHUB_REPOSITORY_OWNER" {
+  default = "soramitsukhmer-lab"
+}
+
 target "default" {
   matrix = {
     version = MATRIX_VERSIONS
@@ -16,7 +20,7 @@ target "default" {
     "linux/arm64",
   ]
   tags = [
-      "harbor.sorakh.io/soramitsukhmer-lab/consul:${version}"
+      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}"
   ]
 }
 
@@ -27,6 +31,6 @@ target "dev" {
   name = "consul_${replace(version, ".", "_")}_dev"
   context = "v${version}"
   tags = [
-      "harbor.sorakh.io/soramitsukhmer-lab/consul:${version}-dev"
+      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}-dev"
   ]
 }
