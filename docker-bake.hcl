@@ -1,10 +1,3 @@
-variable "MATRIX_VERSIONS" {
-  type = list(string)
-  default = [
-    "1.21.3",
-  ]
-}
-
 variable "GITHUB_REPOSITORY_OWNER" {
   default = "soramitsukhmer-lab"
 }
@@ -20,9 +13,20 @@ group "default" {
   ]
 }
 
+# --------------------------------------------------
+# HashiCorp Consul
+#--------------------------------------------------
+
+variable "CONSUL_VERSIONS" {
+  type = list(string)
+  default = [
+    "1.21.3",
+  ]
+}
+
 target "consul" {
   matrix = {
-    version = MATRIX_VERSIONS
+    version = CONSUL_VERSIONS
   }
   name = "consul_${replace(version, ".", "_")}"
   inherits = [
@@ -71,13 +75,54 @@ group "dev" {
   ]
 }
 
+# --------------------------------------------------
+# HashiCorp Vault
+#--------------------------------------------------
+
+variable "VAULT_VERSIONS" {
+  type = list(string)
+  default = [
+    "1.20.0",
+  ]
+}
+
 target "consul-dev" {
   matrix = {
-    version = MATRIX_VERSIONS
+    version = VAULT_VERSIONS
   }
   name = "consul_${replace(version, ".", "_")}_dev"
   context = "consul/v${version}"
   tags = [
       "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}-dev"
+  ]
+}
+
+target "vault" {
+  matrix = {
+    version = VAULT_VERSIONS
+  }
+  name = "vault_${replace(version, ".", "_")}"
+  inherits = [
+    "docker-metadata-action",
+    "github-metadata-action",
+  ]
+  context = "v${version}"
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+  ]
+  tags = [
+      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/vault:${version}"
+  ]
+}
+
+target "vault-dev" {
+  matrix = {
+    version = VAULT_VERSIONS
+  }
+  name = "vault_${replace(version, ".", "_")}_dev"
+  context = "v${version}"
+  tags = [
+      "ghcr.io/${GITHUB_REPOSITORY_OWNER}/vault:${version}-dev"
   ]
 }
