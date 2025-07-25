@@ -20,7 +20,6 @@ RUN --mount=type=cache,target=/root/.yarn/ \
     --mount=type=cache,target=/root/.cache/yarn \
     --mount=type=cache,target=/usr/local/share/.cache/yarn \
 <<EOF
-    (set -x; cat version/VERSION)
     make ui-regen
 EOF
 
