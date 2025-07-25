@@ -37,6 +37,7 @@ services:
       consul:
     volumes:
       - data:/consul/data
+      - /var/run/docker.sock:/var/run/docker.sock
     deploy:
       mode: global
       placement:
