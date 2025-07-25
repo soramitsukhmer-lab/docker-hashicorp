@@ -49,7 +49,7 @@ target "consul-init" {
     "linux/amd64",
     "linux/arm64",
   ]
-  tags = [ "ghcr.io/soramitsukhmer-lab/consul-init:latest" ]
+  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-init:latest" ]
 }
 
 target "consul-auto-discover" {
@@ -62,7 +62,7 @@ target "consul-auto-discover" {
     "linux/amd64",
     "linux/arm64",
   ]
-  tags = [ "ghcr.io/soramitsukhmer-lab/consul-auto-discover:latest" ]
+  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-auto-discover:latest" ]
 }
 
 group "dev" {
