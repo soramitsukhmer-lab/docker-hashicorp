@@ -70,7 +70,8 @@ EOF
 FROM --platform=$BUILDPLATFORM golang:${GO_VERSION}-alpine AS discover-dockerswarm
 ADD https://github.com/socheatsok78/go-discover-dockerswarm.git#main /go-discover-dockerswarm
 WORKDIR /go-discover-dockerswarm/cmd
-RUN go build -o /bin/discover-dockerswarm .
+RUN go build -o /bin/discover-dockerswarm . \
+    && chmod u+s /bin/discover-dockerswarm
 
 # Final stage
 FROM hashicorp/consul:${CONSUL_VERSION}
