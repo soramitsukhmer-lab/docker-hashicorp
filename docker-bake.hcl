@@ -62,6 +62,19 @@ target "consul-dev" {
   ]
 }
 
+target "consul-auto-discover" {
+  inherits = [
+    "docker-metadata-action",
+    "github-metadata-action",
+  ]
+  context = "consul-auto-discover"
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+  ]
+  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-auto-discover:latest" ]
+}
+
 target "consul-init" {
   inherits = [
     "docker-metadata-action",
@@ -75,17 +88,17 @@ target "consul-init" {
   tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-init:latest" ]
 }
 
-target "consul-auto-discover" {
+target "consul-node-init" {
   inherits = [
     "docker-metadata-action",
     "github-metadata-action",
   ]
-  context = "consul-auto-discover"
+  context = "consul-node-init"
   platforms = [
     "linux/amd64",
     "linux/arm64",
   ]
-  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-auto-discover:latest" ]
+  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-node-init:latest" ]
 }
 
 # --------------------------------------------------
