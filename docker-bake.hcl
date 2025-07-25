@@ -17,6 +17,7 @@ group "dev" {
   targets = [
     "consul-dev",
     "vault-dev",
+    "consul-node-init-dev",
   ]
 }
 
@@ -72,6 +73,11 @@ target "consul-node-init" {
     "linux/arm64",
   ]
   tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-node-init:latest" ]
+}
+
+target "consul-node-init-dev" {
+  context = "consul-node-init"
+  tags = [ "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul-node-init:dev" ]
 }
 
 # --------------------------------------------------
