@@ -11,6 +11,10 @@ target "default" {
   }
   name = "consul_${replace(version, ".", "_")}"
   context = "v${version}"
+  platforms = [
+    "linux/amd64",
+    "linux/arm64",
+  ]
   tags = [
       "harbor.sorakh.io/soramitsukhmer-lab/consul:${version}"
   ]
