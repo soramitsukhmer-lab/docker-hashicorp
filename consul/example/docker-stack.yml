@@ -1,14 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/swarmlibs/dockerstack-schema/main/schema/dockerstack-spec.json
 
 services:
-  ingress:
-    image: caddy:2.10-alpine
-    command: caddy reverse-proxy --from :8500 --to tasks.consul:8500
-    ports:
-      - "8500:8500"
-    networks:
-      consul:
-
   consul:
     image: ghcr.io/soramitsukhmer-lab/consul:1.21.3-dev
     command: agent
@@ -18,14 +10,14 @@ services:
         {
           "bind_addr": "0.0.0.0",
           "client_addr": "0.0.0.0",
-          "advertise_addr": "{{`{{ GetInterfaceIP \"eth0\" }}`}}",
+          "advertise_addr": "{{`{{ GetInterfaceIP \"${CONSUL_ADVERTISE_INTERFACE:-eth0}\" }}`}}",
           "ui_config": {
             "enabled": true
           },
           "server": true,
           "bootstrap": ${CONSUL_BOOTSTRAP:-false},
           "retry_join": [
-            "provider=netaddrs addrs=tasks.consul"
+            "provider=netaddrs addrs=\"exec=dockerswarm-node-discover.sh\""
           ],
           "rejoin_after_leave": true,
           "services": [
@@ -34,10 +26,14 @@ services:
           ]
         }
     networks:
-      consul:
+      host:
     volumes:
       - data:/consul/data
       - /var/run/docker.sock:/var/run/docker.sock
+    configs:
+      - source: dockerswarm-node-discover.sh
+        target: /bin/dockerswarm-node-discover.sh
+        mode: 0755
     deploy:
       mode: global
       placement:
@@ -56,9 +52,15 @@ services:
         delay: 90s
         order: stop-first
 
-networks:
-  consul:
+configs:
+  dockerswarm-node-discover.sh:
+    file: ./dockerswarm-node-discover.sh
 
 volumes:
   data:
-    name: "{{.Service.Name}}_{{.Task.Slot}}_data"
+    name: '{{ index .Service.Labels "com.docker.stack.namespace" }}_consul_{{.Task.Slot}}_data'
+
+networks:
+  host:
+    name: host
+    external: true
