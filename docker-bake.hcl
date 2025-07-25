@@ -24,11 +24,11 @@ target "consul" {
   matrix = {
     version = MATRIX_VERSIONS
   }
+  name = "consul_${replace(version, ".", "_")}"
   inherits = [
     "docker-metadata-action",
     "github-metadata-action",
   ]
-  name = "consul_${replace(version, ".", "_")}"
   context = "consul/v${version}"
   platforms = [
     "linux/amd64",
