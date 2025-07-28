@@ -34,6 +34,9 @@ target "consul" {
     "github-metadata-action",
   ]
   context = "consul/v${version}"
+  contexts = {
+    "go-discover-dockerswarm" = "docker-image://ghcr.io/socheatsok78/go-discover-dockerswarm:latest"
+  }
   platforms = [
     "linux/amd64",
     "linux/arm64",
@@ -77,6 +80,9 @@ target "vault" {
     "github-metadata-action",
   ]
   context = "vault/v${version}"
+  contexts = {
+    "go-discover-dockerswarm" = "docker-image://ghcr.io/socheatsok78/go-discover-dockerswarm:latest"
+  }
   platforms = [
     "linux/amd64",
     "linux/arm64",
