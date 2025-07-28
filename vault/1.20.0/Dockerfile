@@ -1,3 +1,5 @@
+FROM ghcr.io/socheatsok78/go-discover-dockerswarm:latest AS go-discover-dockerswarm
+
 FROM ghcr.io/socheatsok78-lab/vault:1.20.0
 
 # https://github.com/socheatsok78/dockerfiles
