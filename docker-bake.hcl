@@ -33,7 +33,7 @@ target "consul" {
     "docker-metadata-action",
     "github-metadata-action",
   ]
-  context = "consul/v${version}"
+  context = "consul/${version}"
   contexts = {
     "go-discover-dockerswarm" = "docker-image://ghcr.io/socheatsok78/go-discover-dockerswarm:latest"
   }
@@ -79,7 +79,7 @@ target "vault" {
     "docker-metadata-action",
     "github-metadata-action",
   ]
-  context = "vault/v${version}"
+  context = "vault/${version}"
   contexts = {
     "go-discover-dockerswarm" = "docker-image://ghcr.io/socheatsok78/go-discover-dockerswarm:latest"
   }
