@@ -67,6 +67,7 @@ variable "VAULT_VERSIONS" {
   type = list(string)
   default = [
     "1.20.0",
+    "1.20.1",
   ]
 }
 
