@@ -9,7 +9,7 @@ What it does:
 ```yml
 services:
   consul:
-    image: ghcr.io/soramitsukhmer-lab/consul:dev
+    image: ghcr.io/socheatsok78-lab/consul:dev
     command: agent -server -ui -bootstrap-expect=1
     ports:
       - "8300:8300/tcp" # Server RPC
@@ -30,7 +30,7 @@ services:
       - consul-node-init
 
   consul-node-init:
-    image: ghcr.io/soramitsukhmer-lab/consul-node-init:dev
+    image: ghcr.io/socheatsok78-lab/consul-node-init:dev
     networks:
       consul-node-network:
     volumes:
