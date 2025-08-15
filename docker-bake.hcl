@@ -21,7 +21,8 @@ variable "CONSUL_VERSIONS" {
   type = list(string)
   default = [
     "latest",
-    "1.21.3",
+    // "1.21.3",
+    "1.21.4",
   ]
 }
 
