@@ -22,7 +22,7 @@ variable "CONSUL_VERSIONS" {
   default = [
     "latest",
     // "1.21.3",
-    "1.21.4",
+    // "1.21.4",
   ]
 }
 
@@ -30,7 +30,7 @@ target "consul" {
   matrix = {
     version = CONSUL_VERSIONS
   }
-  name = "consul_${replace(version, ".", "_")}"
+  name = "consul_${sanitize(version)}"
   inherits = [
     "docker-metadata-action",
     "github-metadata-action",
@@ -66,10 +66,10 @@ variable "VAULT_VERSIONS" {
   type = list(string)
   default = [
     "latest",
-    # "1.17.6",
-    # "1.20.0",
-    # "1.20.1",
-    "1.20.2",
+    // "1.17.6",
+    // "1.20.0",
+    // "1.20.1",
+    // "1.20.2",
   ]
 }
 
@@ -77,7 +77,7 @@ target "vault" {
   matrix = {
     version = VAULT_VERSIONS
   }
-  name = "vault_${replace(version, ".", "_")}"
+  name = "vault_${sanitize(version)}"
   inherits = [
     "docker-metadata-action",
     "github-metadata-action",
