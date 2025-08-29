@@ -40,6 +40,9 @@ target "consul" {
     "linux/amd64",
     "linux/arm64",
   ]
+  labels = {
+    "org.opencontainers.image.description" = "Consul is a distributed, highly available, and data center aware solution to connect and configure applications across dynamic, distributed infrastructure."
+  }
   tags = [
     "ghcr.io/${GITHUB_REPOSITORY_OWNER}/consul:${version}"
   ]
@@ -88,6 +91,9 @@ target "vault" {
     "linux/amd64",
     "linux/arm64",
   ]
+  labels = {
+    "org.opencontainers.image.description" = "A tool for secrets management, encryption as a service, and privileged access management"
+  }
   tags = [
     "ghcr.io/${GITHUB_REPOSITORY_OWNER}/vault:${version}"
   ]
