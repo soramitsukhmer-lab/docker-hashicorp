@@ -21,8 +21,8 @@ variable "CONSUL_VERSIONS" {
   type = list(string)
   default = [
     "latest",
-    // "1.21.3",
-    // "1.21.4",
+    "1.21.3",
+    "1.21.4",
     "1.21.5",
   ]
 }
@@ -71,10 +71,10 @@ variable "VAULT_VERSIONS" {
   type = list(string)
   default = [
     "latest",
-    // "1.17.6",
-    // "1.20.0",
-    // "1.20.1",
-    // "1.20.2",
+    "1.17.6",
+    "1.20.0",
+    "1.20.1",
+    "1.20.2",
     "1.20.3",
     "1.20.4",
   ]
