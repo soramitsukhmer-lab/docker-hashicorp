@@ -1,33 +1,46 @@
 name: Build
+run-name: Build (${{ inputs.target }}, ${{ inputs.version }})
 
 on:
   workflow_dispatch:
+    inputs:
+      target:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      push:
+        type: boolean
+        required: false
+        default: false
+  workflow_call:
+    inputs:
+      target:
+        type: string
+        required: true
+      version:
+        type: string
+        required: true
+      push:
+        type: boolean
+        required: false
+        default: false
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ inputs.target }}-${{ inputs.version }}
   cancel-in-progress: true
 
 jobs:
   prepare:
     runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.generate.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Generate matrix
-        id: generate
-        run: ./scripts/generate-build-matrix.sh
+      - run: sleep 10
 
   build:
     runs-on: ubuntu-latest
     needs:
       - prepare
-    strategy:
-      fail-fast: false
-      matrix:
-        include: ${{ fromJson(needs.prepare.outputs.matrix) }}
     permissions:
       contents: read
       packages: write
@@ -46,7 +59,8 @@ jobs:
         id: github-meta
         uses: dockerbakery/github-metadata-action@v3
 
-      - name: Login to GitHub Container Registry
+      - if: inputs.push
+        name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -56,12 +70,12 @@ jobs:
       - name: Build and push
         uses: docker/bake-action@v6
         env:
-          CONSUL_VERSIONS: ${{ matrix.version }}
-          VAULT_VERSIONS: ${{ matrix.version }}
-          OPENBAO_VERSIONS: ${{ matrix.version }}
+          CONSUL_VERSIONS: ${{ inputs.version }}
+          VAULT_VERSIONS: ${{ inputs.version }}
+          OPENBAO_VERSIONS: ${{ inputs.version }}
         with:
-          targets: ${{ matrix.target }}
-          push: ${{ github.event_name != 'pull_request' }}
+          targets: ${{ inputs.target }}
+          push: ${{ inputs.push }}
           files: |
             ./docker-bake.hcl
             cwd://${{ steps.docker-meta.outputs.bake-file-labels }}
@@ -69,4 +83,4 @@ jobs:
             cwd://${{ steps.github-meta.outputs.bake-file }}
           set: |
             *.cache-from=type=gha
-            *.cache-to=type=gha,mode=max
+            ${{ inputs.push && '*.cache-to=type=gha,mode=max' || ''}}
