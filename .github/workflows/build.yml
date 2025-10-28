@@ -57,7 +57,7 @@ jobs:
 
       - name: Generate GitHub metadata
         id: github-meta
-        uses: dockerbakery/github-metadata-action@v3
+        uses: dockerbakery/github-metadata-action@v4
 
       - if: inputs.push
         name: Login to GitHub Container Registry
