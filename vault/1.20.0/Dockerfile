@@ -1,4 +1,9 @@
+FROM ghcr.io/socheatsok78/go-discover-dockerswarm:latest AS go-discover-dockerswarm
+
 FROM ghcr.io/socheatsok78-lab/vault:1.20.0
+
+# https://github.com/socheatsok78/dockerfiles
+COPY --from=go-discover-dockerswarm / /
 
 # https://github.com/soramitsukhmer-lab/vault-plugin-catalog
 ARG TARGETARCH
