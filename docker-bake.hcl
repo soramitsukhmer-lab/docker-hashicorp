@@ -5,6 +5,14 @@ variable "GITHUB_REPOSITORY_OWNER" {
 target "docker-metadata-action" {}
 target "github-metadata-action" {}
 
+target "shared-tools" {
+  contexts = {
+    "go-discover-dockerswarm" = "docker-image://ghcr.io/socheatsok78-lab/go-discover-dockerswarm:latest"
+    "go-discover" = "docker-image://ghcr.io/socheatsok78-lab/go-discover:latest"
+    "go-netaddrs" = "docker-image://ghcr.io/socheatsok78-lab/go-netaddrs:latest"
+  }
+}
+
 group "default" {
   targets = [
     "consul",
@@ -35,6 +43,7 @@ target "consul" {
   inherits = [
     "docker-metadata-action",
     "github-metadata-action",
+    "shared-tools",
   ]
   context = "consul/${version}"
   platforms = [
@@ -88,6 +97,7 @@ target "vault" {
   inherits = [
     "docker-metadata-action",
     "github-metadata-action",
+    "shared-tools",
   ]
   context = "vault/${version}"
   platforms = [
