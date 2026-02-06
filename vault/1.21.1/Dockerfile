@@ -1,5 +1,10 @@
 FROM ghcr.io/socheatsok78-lab/vault:1.21.1
 
+# https://github.com/socheatsok78/dockerfiles
+COPY --from=go-discover-dockerswarm / /
+COPY --from=go-discover / /
+COPY --from=go-netaddrs / /
+
 # https://github.com/soramitsukhmer-lab/vault-plugin-catalog
 ARG TARGETARCH
 ARG VAULT_PLUGIN_CATALOG_VERSION=0.1.0-rc.11
