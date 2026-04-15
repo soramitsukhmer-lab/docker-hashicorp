@@ -1,4 +1,4 @@
-FROM ghcr.io/socheatsok78-lab/vault:1.21.4
+FROM ghcr.io/socheatsok78-lab/vault:2.0.0
 
 # https://github.com/socheatsok78/dockerfiles
 COPY --from=go-discover-dockerswarm / /
